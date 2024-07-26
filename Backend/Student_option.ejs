@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Background Page</title>
+    <style>
+        /* Set black background for the entire page */
+        body {
+            background-color: #000000; /* Black */
+            color: #FFFFFF; /* White text for readability */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        /* Card styles */
+        .card-6 .card-heading {
+            background: transparent;
+        }
+
+        .card-heading {
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            justify-content: center; /* Center horizontally */
+            margin-bottom: 20px;
+        }
+
+        .card-heading img {
+            margin-right: 8px; /* Adjust spacing between image and text */
+            margin-top: -7px; /* Move image 7px up */
+        }
+
+        .card-heading .title {
+            font-size: 49px; /* Adjust font size if needed */
+        }
+
+        /* Center content */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: -20vh; /* Shift container up on larger screens */
+        }
+
+        /* Button styles */
+        .attendance-btn {
+            background-color: white; /* White background */
+            color: black; /* Black text */
+            padding: 15px 30px; /* Padding for buttons */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor */
+            margin: 10px; /* Margin around buttons */
+            font-size: 18px; /* Font size */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+        }
+
+        /* Hover effect */
+        .attendance-btn:hover {
+            background-color: #FFD700; /* Change to yellow on hover */
+            color: #000000; /* Change text color to black */
+        }
+
+        /* Adjustments for larger screens */
+        @media (min-width: 768px) {
+            .container {
+                margin-top: -20vh; /* Shift container up */
+            }
+        }
+
+        /* Adjustments for smaller screens */
+        @media (max-width: 767px) {
+            .card-heading {
+                flex-direction: row; /* Ensure horizontal layout on small screens */
+                justify-content: center; /* Center align horizontally */
+                align-items: center; /* Align items to the center */
+                text-align: center; /* Center align text */
+                margin-bottom: 15px;
+            }
+
+            .card-heading img {
+                margin-left: 5px;
+                margin-right: 8px; /* Keep some margin between image and text */
+                margin-bottom: 0; /* Reset margin-bottom */
+                margin-top: 0; /* Reset margin-top */
+                width: 80px; /* Increase size for smaller screens */
+                height: 80px; /* Increase size for smaller screens */
+            }
+
+            .card-heading .title {
+                font-size: 30px; /* Increase font size for smaller screens */
+            }
+
+            /* Center container vertically and slightly shift up on smaller screens */
+            .container {
+                height: auto;
+                padding-top: 20px;
+                margin-top: -10vh; /* Shift container up on mobile screens */
+            }
+
+            .container div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card card-6">
+            <div class="card-heading">
+                <img src="abc.png" alt="Logo" width="70" height="70">
+                <h2 class="title">Student Login</h2>
+            </div>
+        </div>
+        <div>
+            <a href="/mark_attendance" class="attendance-btn">Mark Attendance</a>
+            <a class="attendance-btn" href="/show_attendance">See Attendance</a>
+        </div>
+    </div>
+</body>
+</html>

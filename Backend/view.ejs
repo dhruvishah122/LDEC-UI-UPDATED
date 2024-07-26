@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Live Table Insert Update Delete in Node.js with MySQL</title>
+    <link href="https://getbootstrap.com/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+        .card-header {
+            background-color: black;
+            color: white;
+        }
+        .table {
+            color: black;
+            border: 1px solid #444;
+        }
+        th, td {
+            background-color: white;
+            color: black;
+            border: 1px solid #444;
+            padding: 10px;
+            position: relative;
+        }
+        th {
+            background-color: #f1f1f1;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f9f9f9; /* Light grey for odd rows */
+        }
+        .table-striped tbody tr:nth-of-type(even) {
+            background-color: #ffffff; /* White for even rows */
+        }
+        .table-striped tbody tr {
+            border-bottom: 1px solid #ddd; /* Subtle separator between rows */
+        }
+        .table-striped td:not(:last-child) {
+            border-right: 1px solid #ddd; /* Subtle separator between columns */
+        }
+        .editable input {
+            background-color: white;
+            color: black;
+            border: 1px solid #ccc;
+        }
+        .edit-btn, .save-btn, .cancel-btn {
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid transparent;
+            display: inline-block;
+            margin: 0 5px;
+            color: white;
+            background-color: black;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .edit-btn:hover {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .save-btn:hover {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .cancel-btn:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        .edit-btn, .save-btn, .cancel-btn {
+            border-color: black;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .actions {
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .table {
+                font-size: 18px; /* Increase font size for better readability */
+                width: 100%;
+                height:fit-content; /* Ensure full width on mobile */
+            }
+            th, td {
+                font-size: 18px; /* Increase font size for better readability */
+                padding: 20px; /* Increase padding for touch friendliness */
+            }
+            .edit-btn, .save-btn, .cancel-btn {
+                padding: 15px 25px; /* Larger padding for better touch targets */
+                font-size: 16px; /* Increase font size for better readability */
+            }
+            h1 img {
+                width: 50px; /* Adjust image size for smaller screens */
+                height: 50px;
+            }
+            .card-header {
+                font-size: 18px; /* Adjust font size for the card header */
+            }
+            /* Make the table scrollable horizontally on small screens */
+            .table-responsive {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch; /* Enable smooth scrolling */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5 mb-5">
+        <h1>
+            <img src="abc.png" alt="Girl in a jacket" width="70" height="70"  style="margin-top: -8px;">
+
+            <b>Student Attendance Data</b></h1>
+        <div class="mt-3 mb-3">
+            <div class="card">
+                <div class="card-header" style="font-size: 18px;">
+                    <%= tableName %> Data table</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped mt-3">
+                            <thead>
+                                <tr>
+                                    <% columns.forEach(function(column) { %>
+                                        <th><%= column %></th>
+                                    <% }); %>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% data.forEach(function(row) { %>
+                                    <tr data-enrollment-no="<%= row.Enrollment_no %>" data-table="<%= tableName %>">
+                                        <% columns.forEach(function(column) { %>
+                                            <td class="editable" data-column="<%= column %>"><%= row[column] %></td>
+                                        <% }); %>
+                                        <td class="actions">
+                                            <span class="edit-btn">Edit</span>
+                                            <span class="save-btn d-none">Save</span>
+                                            <span class="cancel-btn d-none">Cancel</span>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.edit-btn').on('click', function() {
+                var $row = $(this).closest('tr');
+                $row.find('.editable').each(function() {
+                    var value = $(this).text();
+                    $(this).html('<input type="text" class="form-control" value="' + value + '">');
+                });
+                $row.find('.edit-btn').addClass('d-none');
+                $row.find('.save-btn, .cancel-btn').removeClass('d-none');
+            });
+
+            $('.cancel-btn').on('click', function() {
+                var $row = $(this).closest('tr');
+                $row.find('.editable').each(function() {
+                    var value = $(this).find('input').val();
+                    $(this).text(value);
+                });
+                $row.find('.edit-btn').removeClass('d-none');
+                $row.find('.save-btn, .cancel-btn').addClass('d-none');
+            });
+
+            $('.save-btn').on('click', function() {
+                var $row = $(this).closest('tr');
+                var Enrollment_no = $row.data('enrollment-no');
+                var table = $row.data('table'); // Dynamically get the table name
+                var data = {};
+
+                $row.find('.editable').each(function() {
+                    var column = $(this).data('column');
+                    var value = $(this).find('input').val();
+                    $(this).text(value);
+                    data[column] = value;
+                });
+
+                $.ajax({
+                    url: '/update',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ Enrollment_no: Enrollment_no, table: table, data: data }),
+                    success: function(response) {
+                        console.log(response);
+                        $row.find('.edit-btn').removeClass('d-none');
+                        $row.find('.save-btn, .cancel-btn').addClass('d-none');
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        alert('Error updating data');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 8080,
+            "driver": "MySQL",
+            "name": "localhost",
+            "database": "ldce",
+            "username": "root"
+        }
+    ]
+}
