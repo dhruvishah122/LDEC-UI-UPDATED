@@ -148,7 +148,7 @@ app.post("/register", (req, res) => {
                 }
                 else if (Semester === '5') {
                     let sem5Query = `INSERT INTO sem_5 (Enrollment_no, PE , CN ,ADA , IPDC, WD , DSCI,CS ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-                    let sem_5 = [Enrollment_no, '0', '0', '0', '0', '0', '0'];
+                    let sem_5 = [Enrollment_no, '0', '0','0', '0', '0', '0', '0'];
 
                     connection.query(sem5Query, sem_5, (err) => {
                         if (err) {
@@ -233,6 +233,13 @@ else
     console.log(results);
     res.render("Student_option.ejs");
     });
+}else if(sem=='2'){
+    let q1=`update sem_2 set \`${id}\` = \`${id}\` + 1 where Enrollment_no=${req.body.enroll}`;
+    connection.query(q1,(error,results)=>{
+    if(error) throw error;//res.send("WRONG DETAILS");
+    console.log(results);
+    res.send("Attendance marked successfully");
+    });
 }
 else if(sem=='1'){
     let q1=`update year_1 set \`${id}\` = \`${id}\` + 1 where Enrollment_no=${req.body.enroll}`;
@@ -250,8 +257,25 @@ else if(sem=='6'){
     res.send("Attendance marked successfully");
     });
 }
+else if(sem=='5'){
+    let q1=`update sem_5 set \`${id}\` = \`${id}\` + 1 where Enrollment_no=${req.body.enroll}`;
+    connection.query(q1,(error,results)=>{
+    if(error) throw error;//res.send("WRONG DETAILS");
+    console.log(results);
+    res.send("Attendance marked successfully");
+    });
+}
+else if(sem=='3'){
+    let q1=`update sem_3 set \`${id}\` = \`${id}\` + 1 where Enrollment_no=${req.body.enroll}`;
+    connection.query(q1,(error,results)=>{
+    if(error) throw error;//res.send("WRONG DETAILS");
+    console.log(results);
+    res.send("Attendance marked successfully");
+    });
+}
 }
 });
+
 //connection.end();
 });
 //alerts when email sent
@@ -374,6 +398,46 @@ app.get("/show_attendance",(req,res)=>{
         res.render("Student_view.ejs",{data:result,columns:columnNames});
         });
     }
+    if(sem==5){
+        let q=`select * from sem_5 natural join student_details where  Enrollment_no=? and sem_5.Enrollment_no=student_details.Enrollment_no`;
+        connection.query(q,[enroll],(err,result)=>{
+        if(err) throw err;
+        const columnNames = Object.keys(result[0]);
+        res.render("Student_view.ejs",{data:result,columns:columnNames});
+        });
+    }
+    if(sem==3){
+        let q=`select * from sem_3 natural join student_details where  Enrollment_no=? and sem_3.Enrollment_no=student_details.Enrollment_no`;
+        connection.query(q,[enroll],(err,result)=>{
+        if(err) throw err;
+        const columnNames = Object.keys(result[0]);
+        res.render("Student_view.ejs",{data:result,columns:columnNames});
+        });
+    }
+    if(sem==6){
+        let q=`select * from sem_6 natural join student_details where  Enrollment_no=? and sem_6.Enrollment_no=student_details.Enrollment_no`;
+        connection.query(q,[enroll],(err,result)=>{
+        if(err) throw err;
+        const columnNames = Object.keys(result[0]);
+        res.render("Student_view.ejs",{data:result,columns:columnNames});
+        });
+    }
+    if(sem==1){
+        let q=`select * from year_1 natural join student_details where  Enrollment_no=? and year_1.Enrollment_no=student_details.Enrollment_no`;
+        connection.query(q,[enroll],(err,result)=>{
+        if(err) throw err;
+        const columnNames = Object.keys(result[0]);
+        res.render("Student_view.ejs",{data:result,columns:columnNames});
+        });
+    }
+    if(sem==2){
+        let q=`select * from year_1 natural join student_details where  Enrollment_no=? and year_1.Enrollment_no=student_details.Enrollment_no`;
+        connection.query(q,[enroll],(err,result)=>{
+        if(err) throw err;
+        const columnNames = Object.keys(result[0]);
+        res.render("Student_view.ejs",{data:result,columns:columnNames});
+        });
+    }
     });
 
 app.get("/faculty_access",(req,res)=>{
@@ -384,44 +448,50 @@ app.post("/edit_attendance_access",(req,res)=>{
   if(sem==4){
     // let q=`select * from sem_4 inner join student_details on sem_4.Enrollment_no=student_details.Enrollment_no`;
     let q=`select sem_4.* from student_details inner join sem_4 where sem_4.Enrollment_no=student_details.Enrollment_no `;
+    if(q!=null){
     connection.query(q,(error,result)=>{
         if(error) throw error;
         const columnNames = Object.keys(result[0]);
         res.render("view.ejs",{data:result,columns:columnNames,tableName:'sem_4'});
-    });
+    });}
   }
   if(sem==1){
     let q=`select year_1.* from year_1 inner join student_details on year_1.Enrollment_no=student_details.Enrollment_no`;
+    if(q!=null){
     connection.query(q,(error,result)=>{
         if(error) throw error;
         const columnNames = Object.keys(result[0]);
         res.render("view.ejs",{data:result,columns:columnNames,tableName:'year_1'});
     });
+}
   }
   if(sem==6){
     let q=`select sem_6.* from sem_6 inner join student_details on sem_6.Enrollment_no=student_details.Enrollment_no`;
+    if(q!=null){
     connection.query(q,(error,result)=>{
         if(error) throw error;
         const columnNames = Object.keys(result[0]);
         res.render("view.ejs",{data:result,columns:columnNames,tableName:'sem_6'});
-    });
+    });}
   }
   if(sem==3){
     let q=`select sem_3.* from sem_3 inner join student_details on sem_3.Enrollment_no=student_details.Enrollment_no`;
+    if(q!=null){
     connection.query(q,(error,result)=>{
         if(error) throw error;
         const columnNames = Object.keys(result[0]);
         res.render("view.ejs",{data:result,columns:columnNames,tableName:'sem_3'});
-    });
+    });}
   }
   if(sem==5){
     let q=`select sem_5.* from sem_5 inner join student_details on sem_5.Enrollment_no=student_details.Enrollment_no`;
+    if(q!=null){
     connection.query(q,(error,result)=>{
         if(error) throw error;
         const columnNames = Object.keys(result[0]);
         res.render("view.ejs",{data:result,columns:columnNames,tableName:'sem_5'});
     });
-  }
+  }}
 });
 app.post('/update', (req, res) => {
     const { Enrollment_no, table, data } = req.body;

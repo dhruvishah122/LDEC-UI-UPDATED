@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines":{
-    "node":"18.x"
+  "engines": {
+    "node": "18.x"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node /Backend/index.js"
+    "start": "node /Backend/index.js"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,7 @@
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "expresss": "^0.0.0",
+    "final-attendance-system": "file:",
     "hello": "^0.6.2",
     "http": "^0.0.1-security",
     "js": "^0.1.0",
